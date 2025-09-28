@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { IoLogOutOutline } from "react-icons/io5";
-import { TbSettingsSearch } from "react-icons/tb";
 import { useRouter } from "next/router";
 
 export default function Home() {
@@ -35,98 +33,92 @@ export default function Home() {
   };
 
   const botoes = [
-    { href: "/matematica", label: "Matemática", img: "/gifs/matematica-unscreen.gif" },
-    { href: "/portugues", label: "Português", img: "/gifs/portugues.gif" },
-    { href: "/fisica", label: "Física", img: "/gifs/fisica.gif" },
-    { href: "/quimica", label: "Química", img: "/gifs/quimica.gif" },
-    { href: "/biologia", label: "Biologia", img: "/gifs/biologia.gif" },
-    { href: "/historia", label: "História", img: "/gifs/historia.gif" },
-    { href: "/geografia", label: "Geografia", img: "/gifs/Geografia.gif" },
-    { href: "/filosofia", label: "Filosofia", img: "/gifs/filodofia.gif" },
-    { href: "/sociologia", label: "Sociologia", img: "/gifs/dociologia.gif" },
-    { href: "/ingles", label: "Inglês", img: "/gifs/ingles.gif" },
+    { href: "/oss", label: "OSS" },
+    { href: "/denuncia", label: "DENÚNCIA" },
+    { href: "/mdi", label: "MDI" },
+    { href: "/servicos", label: "Serviços" },
+    { href: "/necon", label: "Necon" },
+    { href: "/servicos-secreto", label: "Serviços Secreto" },
+    { href: "/documentos-sigilosos", label: "Documentos Sigilosos" },
+    { href: "/artigos", label: "Artigos" },
   ];
 
   return (
-    <div className="bg-white text-gray-800 min-h-screen relative overflow-x-hidden">
+    <div className="bg-[#2c2c2c] text-white min-h-screen relative overflow-x-hidden">
+      {/* Botão hamburguer */}
       <button
         onClick={toggleSidebar}
-        className={`fixed top-4 left-4 z-50 text-3xl text-[#546c4a] focus:outline-none transition-all duration-300 ease-in-out ${sidebarOpen ? "translate-x-[260px]" : ""}`}
+        className={`fixed top-4 left-4 z-50 text-3xl text-gray-200 focus:outline-none transition-all duration-300 ease-in-out ${
+          sidebarOpen ? "translate-x-[260px]" : ""
+        }`}
       >
         {sidebarOpen ? "✕" : "☰"}
       </button>
 
+      {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full w-[260px] bg-[#546c4a] text-white p-6 shadow-lg z-40 transform transition-transform duration-300 ease-in-out ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} rounded-r-lg`}
+        className={`fixed top-0 left-0 h-full w-[260px] bg-[#3a3a3a] text-white p-6 shadow-lg z-40 transform transition-transform duration-300 ease-in-out ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } rounded-r-lg border-r border-[#555]`}
       >
         <h2 className="text-xl font-bold mb-6">Menu</h2>
 
         <Link
-          href="/denuncia"
-          className="flex items-center justify-center gap-2 py-3 mb-4 text-white font-semibold text-lg bg-[#546c4a] border-2 border-[#7b9f77] hover:bg-[#7b9f77] hover:border-[#546c4a] rounded-lg transition-all duration-300"
-        >
-          Canais de denúncia
-        </Link>
-
-        <Link
           href="/configuracao"
-          className="flex items-center gap-2 w-full py-2 mb-4 hover:text-green-200 transition-colors"
+          className="flex items-center gap-2 w-full py-2 mb-4 hover:text-gray-300 transition-colors"
         >
-          <TbSettingsSearch size={20} />
           <span>Configurações</span>
         </Link>
 
         <button
           onClick={handleLogout}
-          className="flex items-center gap-2 w-full py-2 hover:text-red-300 transition-colors"
+          className="w-full mt-4 py-2.5 rounded-lg bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold shadow-md hover:from-red-600 hover:to-red-700 hover:shadow-lg transition-all duration-300"
         >
-          <IoLogOutOutline size={20} />
-          <span>Sair</span>
+          Sair
         </button>
       </div>
 
-      <header className="flex flex-col items-center pt-5">
+      {/* Header com logo do MDS */}
+      <header className="flex flex-col items-center pt-10">
         <img
-          src="/animacao.svg"
-          alt="Animação"
-          className="w-full max-w-[150px] sm:max-w-[200px] md:max-w-[250px] lg:max-w-[300px] mb-3 transition-opacity duration-1000 banner-svg"
-        />
-        <img
-          src="/logo/logo.png"
-          alt="Logo EcoProf"
-          className="hidden opacity-0 transition-opacity duration-1000 banner-logo w-full max-w-[150px] sm:max-w-[200px] md:max-w-[250px] lg:max-w-[300px]"
+          src="https://raw.githubusercontent.com/MDS-GOV360/Logo-do-mds/refs/heads/main/logo%20do%20mds.png"
+          alt="Logo MDS"
+          className="w-full max-w-[200px] sm:max-w-[260px] md:max-w-[320px] lg:max-w-[360px] mb-6 opacity-90 hover:opacity-100 transition-opacity duration-500"
         />
       </header>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 px-6 py-12 max-w-[1200px] mx-auto">
-        {botoes.map(({ href, label, img }) => (
+      {/* Grid de botões */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-6 px-6 py-12 max-w-[1200px] mx-auto">
+        {botoes.map(({ href, label }) => (
           <Link
             key={href}
             href={href}
-            className="flex flex-col items-center justify-center bg-[#546c4a] hover:bg-[#7b9f77] text-white py-4 px-6 rounded-2xl shadow-xl transform transition-all duration-300 hover:scale-110 hover:rotate-1 hover:shadow-2xl"
+            className="flex items-center justify-center text-center bg-[#3a3a3a] hover:bg-[#4a4a4a] text-white py-6 px-6 rounded-2xl shadow-md border border-[#555] transition-all duration-300 hover:scale-105 hover:shadow-xl"
           >
-            <img src={img} alt={label} className="w-16 h-16 mb-3" />
-            <span className="text-center font-semibold">{label}</span>
+            <span className="font-semibold text-lg">{label}</span>
           </Link>
         ))}
       </div>
 
+      {/* Modal de logout */}
       {isLogoutModalOpen && (
-        <div className="fixed inset-0 bg-[#546c4a] bg-opacity-50 backdrop-blur-md flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-xl w-full sm:w-[400px] md:w-[500px]">
-            <h3 className="text-xl font-semibold text-gray-700 mb-4 text-center">Deseja sair?</h3>
+        <div className="fixed inset-0 bg-[#2c2c2c] bg-opacity-70 backdrop-blur-md flex justify-center items-center z-50">
+          <div className="bg-[#3a3a3a] p-6 rounded-lg shadow-xl w-full sm:w-[400px] md:w-[500px] border border-[#555]">
+            <h3 className="text-xl font-semibold text-gray-200 mb-6 text-center">
+              Deseja realmente sair?
+            </h3>
             <div className="flex justify-between gap-4">
               <button
                 onClick={confirmLogout}
-                className="w-full px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all"
+                className="w-full px-4 py-2 rounded-lg bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-md hover:shadow-lg"
               >
-                Sim
+                Sim, sair
               </button>
               <button
                 onClick={cancelLogout}
-                className="w-full px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-all"
+                className="w-full px-4 py-2 rounded-lg bg-gray-500 text-white font-semibold hover:bg-gray-600 transition-all duration-300 shadow-md hover:shadow-lg"
               >
-                Não
+                Cancelar
               </button>
             </div>
           </div>

@@ -1,14 +1,14 @@
 {
-  "name": "EcoProf",
-  "short_name": "EcoProf",
+  "name": "MDS",
+  "short_name": "MDS",
   "start_url": "/?homescreen=true",
   "display": "standalone",
-  "background_color": "#546c4a",
-  "theme_color": "#546c4a",
+  "background_color": "#666666",
+  "theme_color": "#666666",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "icon-192x192.png",
+      "src": "/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     }
