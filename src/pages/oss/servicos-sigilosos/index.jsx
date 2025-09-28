@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import { initializeApp } from "firebase/app";
 import {
@@ -73,40 +74,94 @@ export default function ServicosSigilosos() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-900 text-white p-8">
+    <div style={{ minHeight: "100vh", backgroundColor: "#1D1D1D", color: "#FFFFFF", padding: 32 }}>
       {/* Cabeçalho */}
-      <header className="max-w-4xl mx-auto mb-8 flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Serviços Sigilosos</h1>
+      <header style={{ maxWidth: 1024, margin: "0 auto 32px auto", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <h1 style={{ fontSize: "2rem", fontWeight: "bold" }}>Serviços Sigilosos</h1>
         <button
           onClick={() => setModalOpen(true)}
-          className="bg-gray-700 hover:bg-gray-600 text-white font-semibold px-5 py-2 rounded-xl transition"
+          style={{
+            backgroundColor: "#4A4A4A",
+            color: "#FFFFFF",
+            fontWeight: 600,
+            padding: "8px 20px",
+            borderRadius: 12,
+            transition: "background-color 0.3s",
+            cursor: "pointer",
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#5A5A5A")}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#4A4A4A")}
         >
           Nova Publicação
         </button>
       </header>
 
       {/* Lista de publicações */}
-      <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-6">
+      <div
+        style={{
+          maxWidth: 1024,
+          margin: "0 auto",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+          gap: 24,
+        }}
+      >
         {publicacoes.map((pub) => (
-          <div key={pub.id} className="bg-gray-800 rounded-2xl shadow p-4 flex flex-col">
+          <div key={pub.id} style={{ backgroundColor: "#2A2A2A", borderRadius: 24, padding: 16, display: "flex", flexDirection: "column", boxShadow: "0 4px 6px rgba(0,0,0,0.3)" }}>
             <img
               src={pub.image}
               alt="Imagem"
-              className="w-full h-48 object-cover rounded-lg mb-4"
+              style={{ width: "100%", height: 192, objectFit: "cover", borderRadius: 16, marginBottom: 16 }}
             />
-            <div className="flex justify-center gap-4 mt-auto">
+            <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: "auto", flexWrap: "wrap" }}>
               <a
                 href={pub.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg text-white font-medium transition"
+                style={{
+                  backgroundColor: "#3A3A3A",
+                  color: "#FFFFFF",
+                  padding: "8px 12px",
+                  borderRadius: 12,
+                  fontWeight: 500,
+                  textDecoration: "none",
+                  transition: "background-color 0.3s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#4A4A4A")}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#3A3A3A")}
               >
                 Acessar
               </a>
-              <button className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg text-white font-medium transition">
+              <button
+                style={{
+                  backgroundColor: "#3A3A3A",
+                  color: "#FFFFFF",
+                  padding: "8px 12px",
+                  borderRadius: 12,
+                  fontWeight: 500,
+                  border: "none",
+                  cursor: "pointer",
+                  transition: "background-color 0.3s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#4A4A4A")}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#3A3A3A")}
+              >
                 Compartilhar
               </button>
-              <button className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg text-white font-medium transition">
+              <button
+                style={{
+                  backgroundColor: "#3A3A3A",
+                  color: "#FFFFFF",
+                  padding: "8px 12px",
+                  borderRadius: 12,
+                  fontWeight: 500,
+                  border: "none",
+                  cursor: "pointer",
+                  transition: "background-color 0.3s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#4A4A4A")}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#3A3A3A")}
+              >
                 Detalhes
               </button>
             </div>
@@ -116,35 +171,49 @@ export default function ServicosSigilosos() {
 
       {/* Modal */}
       {modalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
-          <div className="bg-gray-800 p-6 rounded-2xl shadow-lg w-96">
-            <h2 className="text-xl font-semibold mb-4">Nova Publicação</h2>
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            backgroundColor: "rgba(29,29,29,0.8)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 50,
+          }}
+        >
+          <div style={{ backgroundColor: "#2A2A2A", padding: 24, borderRadius: 24, boxShadow: "0 8px 12px rgba(0,0,0,0.5)", width: 384 }}>
+            <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginBottom: 16 }}>Nova Publicação</h2>
 
             <input
               type="text"
               placeholder="Link do Google Drive"
               value={link}
               onChange={(e) => setLink(e.target.value)}
-              className="w-full mb-3 p-2 rounded-lg bg-gray-700 text-white outline-none"
+              style={{ width: "100%", marginBottom: 12, padding: 8, borderRadius: 12, backgroundColor: "#3A3A3A", color: "#FFFFFF", border: "none", outline: "none" }}
             />
 
             <input
               type="file"
               accept="image/*"
               onChange={handleImageChange}
-              className="w-full mb-3 p-2 rounded-lg bg-gray-700 text-white outline-none"
+              style={{ width: "100%", marginBottom: 12, padding: 8, borderRadius: 12, backgroundColor: "#3A3A3A", color: "#FFFFFF", border: "none", outline: "none" }}
             />
 
-            <div className="flex justify-end gap-3 mt-4">
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: 12, marginTop: 16, flexWrap: "wrap" }}>
               <button
                 onClick={() => setModalOpen(false)}
-                className="bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded-lg"
+                style={{ backgroundColor: "#4A4A4A", padding: "8px 16px", borderRadius: 12, fontWeight: 500, cursor: "pointer", border: "none", transition: "background-color 0.3s" }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#5A5A5A")}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#4A4A4A")}
               >
                 Cancelar
               </button>
               <button
                 onClick={handleSave}
-                className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg font-semibold"
+                style={{ backgroundColor: "#3A3A3A", padding: "8px 16px", borderRadius: 12, fontWeight: 600, cursor: "pointer", border: "none", color: "#FFFFFF", transition: "background-color 0.3s" }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#4A4A4A")}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#3A3A3A")}
               >
                 Salvar
               </button>

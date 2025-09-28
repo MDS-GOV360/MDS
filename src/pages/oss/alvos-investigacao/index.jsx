@@ -9,7 +9,6 @@ import {
   serverTimestamp,
   query,
   orderBy,
-  where,
   deleteDoc,
   doc,
 } from "firebase/firestore";
@@ -19,7 +18,7 @@ function CustomModal({ isOpen, title, message, onClose, onConfirm, type = "alert
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-800 rounded-2xl p-6 w-full max-w-md shadow-2xl">
+      <div className="bg-[#1D1D1D] rounded-2xl p-6 w-full max-w-md shadow-2xl">
         <h3 className="text-xl font-bold mb-3">{title}</h3>
         <p className="text-gray-300 mb-5">{message}</p>
         <div className="flex justify-end gap-3">
@@ -77,25 +76,22 @@ export default function AlvosInvestigacao() {
   useEffect(() => { fetchAlvos(filter); }, [filter]);
 
   const fetchAlvos = async (f) => {
-  try {
-    const col = collection(db, collectionName);
-    const snap = await getDocs(query(col, orderBy("createdAt", "desc"))); // Apenas orderBy
-    const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-
-    // Filtra no frontend se não for "all"
-    const filtered = f === "all" ? docs : docs.filter((d) => d.status === f);
-    setAlvos(filtered);
-  } catch (err) {
-    console.error("Erro ao buscar alvos:", err);
-    setAlertModal({
-      isOpen: true,
-      title: "Erro ao Buscar Alvos",
-      message: "Erro ao buscar alvos. Veja o console para detalhes.",
-      type: "alert",
-    });
-  }
-};
-
+    try {
+      const col = collection(db, collectionName);
+      const snap = await getDocs(query(col, orderBy("createdAt", "desc")));
+      const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+      const filtered = f === "all" ? docs : docs.filter((d) => d.status === f);
+      setAlvos(filtered);
+    } catch (err) {
+      console.error("Erro ao buscar alvos:", err);
+      setAlertModal({
+        isOpen: true,
+        title: "Erro ao Buscar Alvos",
+        message: "Erro ao buscar alvos. Veja o console para detalhes.",
+        type: "alert",
+      });
+    }
+  };
 
   const fileToBase64 = (file) => new Promise((res, rej) => {
     const reader = new FileReader();
@@ -189,14 +185,14 @@ export default function AlvosInvestigacao() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-900 text-white p-4 md:p-8">
+    <div className="min-h-screen bg-[#1D1D1D] text-white p-4 md:p-8">
       <header className="max-w-6xl mx-auto mb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-2">
         <h2 className="text-2xl font-bold">Sistemas de Alvo de Investigação</h2>
         <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto">
           <select
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            className="bg-gray-800 px-4 py-2 rounded-xl w-full md:w-auto hover:bg-gray-700 transition"
+            className="bg-[#1D1D1D] px-4 py-2 rounded-xl w-full md:w-auto hover:bg-gray-700 transition"
           >
             <option value="all">Todos</option>
             <option value="pre">Pessoas Pré-investigadas</option>
@@ -214,7 +210,7 @@ export default function AlvosInvestigacao() {
 
       <main className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {alvos.map((a) => (
-          <div key={a.id} className="bg-gray-800 rounded-2xl p-4 shadow-lg flex flex-col transition hover:scale-105 hover:shadow-2xl">
+          <div key={a.id} className="bg-[#1D1D1D] rounded-2xl p-4 shadow-lg flex flex-col transition hover:scale-105 hover:shadow-2xl">
             <div className="flex justify-between items-start gap-2 flex-wrap">
               <div className="flex-1 min-w-0">
                 <h3 className="text-lg font-semibold truncate">{a.nome}</h3>
@@ -224,16 +220,23 @@ export default function AlvosInvestigacao() {
               <div className="text-xs text-gray-400 truncate">ID: {a.id}</div>
             </div>
 
-            {a.socialLinks?.length > 0 && (
-              <div className="mt-2 text-sm">
-                <strong>Redes:</strong>
-                <ul className="list-disc ml-5">
-                  {a.socialLinks.map((s, i) => (
-                    <li key={i}><a href={s} target="_blank" rel="noreferrer" className="text-blue-300 truncate hover:underline">{s}</a></li>
-                  ))}
-                </ul>
-              </div>
-            )}
+           {a.socialLinks?.length > 0 && (
+  <div className="mt-2 text-sm">
+    <strong>Redes:</strong>
+    <div className="flex flex-wrap gap-2 mt-1">
+      {a.socialLinks.map((s, i) => (
+        <button
+          key={i}
+          onClick={() => window.open(s, "_blank")}
+          className="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded-lg transition"
+        >
+          Abrir Rede {i + 1}
+        </button>
+      ))}
+    </div>
+  </div>
+)}
+
 
             {a.driveLink && (
               <div className="mt-2">
@@ -271,12 +274,12 @@ export default function AlvosInvestigacao() {
 
       {modalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-800 rounded-2xl p-6 w-full max-w-md shadow-2xl overflow-auto max-h-full">
+          <div className="bg-[#1D1D1D] rounded-2xl p-6 w-full max-w-md shadow-2xl overflow-auto max-h-full">
             <h3 className="text-xl font-bold mb-4">Escolher Alvo</h3>
 
             <div className="mb-3">
               <label className="block text-sm mb-1">Status</label>
-              <select value={status} onChange={(e) => setStatus(e.target.value)} className="w-full p-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition">
+              <select value={status} onChange={(e) => setStatus(e.target.value)} className="w-full p-2 bg-[#1D1D1D] rounded-lg hover:bg-gray-600 transition">
                 <option value="pre">Pré-investigada</option>
                 <option value="investigada">Investigada</option>
                 <option value="pos">Pós-investigada</option>
@@ -285,34 +288,34 @@ export default function AlvosInvestigacao() {
 
             <div className="mb-3">
               <label className="block text-sm mb-1">Nome *</label>
-              <input value={nome} onChange={(e) => setNome(e.target.value)} className="w-full p-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition" placeholder="Nome completo" />
+              <input value={nome} onChange={(e) => setNome(e.target.value)} className="w-full p-2 bg-[#1D1D1D] rounded-lg hover:bg-gray-600 transition" placeholder="Nome completo" />
             </div>
 
             <div className="mb-3">
               <label className="block text-sm mb-1">Data de nascimento (opcional)</label>
-              <input value={nascimento} onChange={(e) => setNascimento(e.target.value)} className="w-full p-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition" placeholder="YYYY-MM-DD" />
+              <input value={nascimento} onChange={(e) => setNascimento(e.target.value)} className="w-full p-2 bg-[#1D1D1D] rounded-lg hover:bg-gray-600 transition" placeholder="YYYY-MM-DD" />
             </div>
 
             <div className="mb-3">
               <label className="block text-sm mb-1">Redes sociais (opcional)</label>
               {socialLinks.map((s, i) => (
                 <div key={i} className="flex gap-2 mb-2 flex-wrap">
-                  <input value={s} onChange={(e) => handleSocialChange(i, e.target.value)} className="flex-1 min-w-[150px] p-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition" placeholder="https://instagram.com/usuario" />
+                  <input value={s} onChange={(e) => handleSocialChange(i, e.target.value)} className="flex-1 min-w-[150px] p-2 bg-[#1D1D1D] rounded-lg hover:bg-gray-600 transition" placeholder="https://instagram.com/usuario" />
                   <button onClick={() => handleRemoveSocial(i)} className="bg-red-600 hover:bg-red-500 px-2 rounded-lg transition">X</button>
                 </div>
               ))}
-              <button onClick={handleAddSocialLink} className="mt-1 bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded-md transition">+ Adicionar rede</button>
+              <button onClick={handleAddSocialLink} className="mt-1 bg-[#1D1D1D] hover:bg-gray-600 px-3 py-1 rounded-md transition">+ Adicionar rede</button>
             </div>
 
             <div className="mb-3">
               <label className="block text-sm mb-1">Link do Google Drive (opcional)</label>
-              <input value={driveLink} onChange={(e) => setDriveLink(e.target.value)} className="w-full p-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition" placeholder="https://drive.google.com/..." />
+              <input value={driveLink} onChange={(e) => setDriveLink(e.target.value)} className="w-full p-2 bg-[#1D1D1D] rounded-lg hover:bg-gray-600 transition" placeholder="https://drive.google.com/..." />
             </div>
 
             <div className="mb-3">
               <label className="block text-sm mb-1">Áudios (opcional)</label>
               <div className="flex flex-col gap-2">
-                <button type="button" className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg flex items-center gap-2 transition" onClick={() => document.getElementById("audioInput").click()}>
+                <button type="button" className="bg-[#1D1D1D] hover:bg-gray-600 px-4 py-2 rounded-lg flex items-center gap-2 transition" onClick={() => document.getElementById("audioInput").click()}>
                   Escolher Áudios
                 </button>
                 <input id="audioInput" type="file" accept="audio/*" multiple onChange={handleAudioFiles} className="hidden" />
@@ -323,7 +326,7 @@ export default function AlvosInvestigacao() {
             <div className="mb-3">
               <label className="block text-sm mb-1">Mensagens / Prints (opcional)</label>
               <div className="flex flex-col gap-2">
-                <button type="button" className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg flex items-center gap-2 transition" onClick={() => document.getElementById("printInput").click()}>
+                <button type="button" className="bg-[#1D1D1D] hover:bg-gray-600 px-4 py-2 rounded-lg flex items-center gap-2 transition" onClick={() => document.getElementById("printInput").click()}>
                   Escolher Prints
                 </button>
                 <input id="printInput" type="file" accept="image/*" multiple onChange={handlePrintFiles} className="hidden" />

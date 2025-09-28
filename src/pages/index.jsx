@@ -1,14 +1,12 @@
-'use client';
+'use client'; // ← PRIMEIRA LINHA, sempre no topo
+
 import Head from 'next/head';
 import { useState, useEffect } from 'react';
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useRouter } from 'next/router';
 import useAuthRedirect from '../hooks/useAuthRedirect';
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('24250@Ln');
-  const [showPassword, setShowPassword] = useState(false);
+  const [pin, setPin] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
@@ -27,8 +25,15 @@ export default function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!email || !password) {
-      setError('Preencha todos os campos obrigatórios.');
+
+    if (!pin) {
+      setError('Digite o PIN.');
+      setSuccess('');
+      return;
+    }
+
+    if (pin !== '638700') {
+      setError('PIN incorreto. Tente novamente.');
       setSuccess('');
       return;
     }
@@ -37,7 +42,7 @@ export default function Login() {
 
     setTimeout(() => {
       localStorage.setItem('token', 'teste-token');
-      localStorage.setItem('usuario', JSON.stringify({ nome: email }));
+      localStorage.setItem('usuario', JSON.stringify({ nome: 'Acesso PIN' }));
       setError('');
       setSuccess('Login bem-sucedido!');
       setLoading(false);
@@ -45,73 +50,76 @@ export default function Login() {
     }, 1000);
   };
 
+  const handleNumberClick = (num) => {
+    if (pin.length < 6) setPin(pin + num);
+  };
+
+  const handleDelete = () => {
+    setPin(pin.slice(0, -1));
+  };
+
   return (
     <>
       <Head>
         <title>MDS - Login</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#2c2c2c" />
+        <meta name="theme-color" content="#1D1D1D" />
         <link rel="manifest" href="/manifest.json" />
-        <link rel="icon" href="icon-192x192.png
-" />
+        <link rel="icon" href="icon-192x192.png" />
       </Head>
 
-      <div className="min-h-screen flex items-center justify-center bg-[#2c2c2c] text-white p-4">
-        <div className="w-full max-w-md bg-[#3a3a3a] rounded-2xl shadow-lg p-6 sm:p-8 flex flex-col gap-6 z-10 border border-[#555]">
-          <h2 className="text-3xl font-bold text-center text-white">Bem-vinda ao MDS</h2>
+      <div className="min-h-screen flex items-center justify-center bg-[#1D1D1D] text-white p-4">
+        <div className="w-full max-w-sm sm:max-w-md bg-[#2a2a2a] rounded-2xl shadow-lg p-6 sm:p-8 flex flex-col gap-6 z-10 border border-[#444]">
+          <h2 className="text-3xl font-bold text-center text-white">Digite seu PIN</h2>
 
           {error && <p className="text-red-500 text-center">{error}</p>}
           {success && <p className="text-green-400 text-center">{success}</p>}
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <div>
-              <label className="text-gray-200 text-sm mb-1 block">Email *</label>
-              <input
-                type="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                placeholder="Digite seu email"
-                className="w-full px-4 py-3 rounded-xl bg-[#4a4a4a] border border-[#666] text-white focus:outline-none focus:ring-2 focus:ring-gray-500"
-              />
-            </div>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4 items-center">
+            <input
+              type="password"
+              value={pin}
+              readOnly
+              placeholder="••••••"
+              className="w-40 sm:w-52 text-center text-2xl sm:text-3xl tracking-[10px] px-4 py-3 rounded-xl bg-[#333] border border-[#555] text-white focus:outline-none"
+            />
 
-            <div>
-              <label className="text-gray-200 text-sm mb-1 block">Senha *</label>
-              <div className="relative">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  placeholder="Digite sua senha"
-                  className="w-full px-4 py-3 rounded-xl bg-[#4a4a4a] border border-[#666] text-white focus:outline-none focus:ring-2 focus:ring-gray-500"
-                />
-                <span
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-300"
+            <div className="grid grid-cols-3 gap-4 mt-4">
+              {[1,2,3,4,5,6,7,8,9].map((num) => (
+                <button
+                  key={num}
+                  type="button"
+                  onClick={() => handleNumberClick(num.toString())}
+                  className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center rounded-full bg-[#444] hover:bg-[#555] text-xl sm:text-2xl font-bold transition"
                 >
-                  {showPassword ? <FaEyeSlash /> : <FaEye />}
-                </span>
-              </div>
+                  {num}
+                </button>
+              ))}
+              <div></div>
+              <button
+                type="button"
+                onClick={() => handleNumberClick('0')}
+                className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center rounded-full bg-[#444] hover:bg-[#555] text-xl sm:text-2xl font-bold transition"
+              >
+                0
+              </button>
+              <button
+                type="button"
+                onClick={handleDelete}
+                className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center rounded-full bg-red-600 hover:bg-red-700 text-xl sm:text-2xl font-bold transition"
+              >
+                ⌫
+              </button>
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-xl font-semibold bg-[#555555] hover:bg-[#666666] transition"
+              className="w-full py-3 mt-6 rounded-xl font-semibold bg-[#444] hover:bg-[#555] transition text-lg sm:text-xl"
             >
               {loading ? 'Carregando...' : 'Entrar'}
             </button>
           </form>
-
-          <div className="flex flex-col items-center gap-2 mt-4">
-            <p className="text-gray-300 text-sm text-center">Novo por aqui?</p>
-            <a
-              href="/cadastro"
-              className="w-full text-center py-3 rounded-xl font-semibold bg-[#555555] hover:bg-[#666666] transition"
-            >
-              Cadastre-se
-            </a>
-          </div>
         </div>
       </div>
     </>

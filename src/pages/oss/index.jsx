@@ -11,46 +11,57 @@ export default function OSS() {
     { href: "/oss/videos", label: "Vídeos" },
     { href: "/oss/servicos-sigilosos", label: "Serviços Sigilosos" },
     { href: "/oss/alvos-investigacao", label: "Alvos de Investigação" },
-     { href: "/oss/relatorio", label: "Relatorio" },
+    { href: "/oss/relatorio", label: "Relatório" },
   ];
 
   return (
-    <div className="relative min-h-screen text-white">
-      {/* Fundo com imagem */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "url('https://ateky.com.br/wp-content/uploads/2025/04/Foto_blog_3_abril_2025-transformed-scaled.jpeg')",
-        }}
-      ></div>
-
-      {/* Overlay escuro para melhor contraste */}
-      <div className="absolute inset-0 bg-black bg-opacity-60"></div>
+    <div style={{ position: "relative", minHeight: "100vh", color: "#FFFFFF", backgroundColor: "#1D1D1D" }}>
+      {/* Overlay leve com HEX */}
+      <div style={{ position: "absolute", inset: 0, backgroundColor: "rgba(29, 29, 29, 0.2)" }}></div>
 
       {/* Conteúdo */}
-      <div className="relative z-10">
+      <div style={{ position: "relative", zIndex: 10 }}>
         {/* Header com logo do MDS */}
-        <header className="flex flex-col items-center pt-10">
+        <header style={{ display: "flex", flexDirection: "column", alignItems: "center", paddingTop: 40, paddingLeft: 16, paddingRight: 16 }}>
           <img
             src="https://raw.githubusercontent.com/MDS-GOV360/Logo-do-mds/refs/heads/main/logo%20do%20mds.png"
             alt="Logo MDS"
-            className="w-full max-w-[200px] sm:max-w-[260px] md:max-w-[320px] lg:max-w-[360px] mb-8 opacity-90 hover:opacity-100 transition-opacity duration-500"
+            style={{ width: "100%", maxWidth: 360, marginBottom: 32, opacity: 0.9, transition: "opacity 0.5s" }}
           />
-          <h1 className="text-3xl font-bold mb-6 text-center">
+          <h1 style={{ fontSize: "2rem", fontWeight: "bold", marginBottom: 24, textAlign: "center" }}>
             Organização Social Secreta
           </h1>
         </header>
 
         {/* Grid de botões */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 px-6 py-12 max-w-[1200px] mx-auto">
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
+          gap: 24,
+          padding: "48px 16px",
+          maxWidth: 1200,
+          margin: "0 auto"
+        }}>
           {botoes.map(({ href, label }) => (
-            <Link
-              key={href}
-              href={href}
-              className="flex items-center justify-center text-center bg-[#3a3a3a] hover:bg-[#4a4a4a] text-white py-6 px-4 rounded-2xl shadow-md border border-[#555] transition-all duration-300 hover:scale-105 hover:shadow-xl"
+            <Link key={href} href={href} style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+              backgroundColor: "#2A2A2A",
+              color: "#FFFFFF",
+              padding: "24px 16px",
+              borderRadius: 24,
+              boxShadow: "0 4px 6px rgba(0,0,0,0.3)",
+              border: "1px solid #555555",
+              textDecoration: "none",
+              fontWeight: 600,
+              transition: "all 0.3s ease"
+            }}
+            onMouseEnter={e => e.currentTarget.style.backgroundColor = "#3A3A3A"}
+            onMouseLeave={e => e.currentTarget.style.backgroundColor = "#2A2A2A"}
             >
-              <span className="font-semibold text-lg">{label}</span>
+              {label}
             </Link>
           ))}
         </div>

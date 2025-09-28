@@ -47,14 +47,12 @@ export default function Publicacoes() {
     }
 
     try {
-      // Adiciona no Firestore
       const docRef = await addDoc(collection(db, "publicacoes"), {
         titulo,
         link,
         criadoEm: new Date()
       });
 
-      // Atualiza lista local
       setPublicacoes([...publicacoes, { id: docRef.id, titulo, link }]);
       setTitulo("");
       setLink("");
@@ -67,12 +65,13 @@ export default function Publicacoes() {
     }
   };
 
-  const publicacoesFiltradas = publicacoes.filter((p) =>
-    p.titulo.toLowerCase().includes(search.toLowerCase())
-  );
+ const publicacoesFiltradas = publicacoes.filter((p) =>
+  p.titulo && p.titulo.toLowerCase().includes(search.toLowerCase())
+);
+
 
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#1a1a1a", color: "#f0f0f0", padding: "20px", fontFamily: "Arial, sans-serif" }}>
+    <div style={{ minHeight: "100vh", backgroundColor: "#1D1D1D", color: "#f0f0f0", padding: "20px", fontFamily: "Arial, sans-serif" }}>
       <h1 style={{ textAlign: "center", fontSize: "2.5rem", marginBottom: "30px", fontWeight: "bold" }}>
         Relatório
       </h1>
@@ -85,8 +84,10 @@ export default function Publicacoes() {
         onChange={(e) => setSearch(e.target.value)}
         style={{
           width: "100%",
+          maxWidth: "600px",
+          margin: "0 auto 20px",
+          display: "block",
           padding: "12px",
-          marginBottom: "20px",
           borderRadius: "8px",
           border: "1px solid #333333",
           backgroundColor: "#2a2a2a",
@@ -95,7 +96,7 @@ export default function Publicacoes() {
       />
 
       {/* Formulário de nova publicação */}
-      <form onSubmit={handleAdicionar} style={{ marginBottom: "30px", display: "flex", flexDirection: "column", gap: "10px" }}>
+      <form onSubmit={handleAdicionar} style={{ marginBottom: "30px", display: "flex", flexDirection: "column", gap: "10px", maxWidth: "600px", marginLeft: "auto", marginRight: "auto" }}>
         <input
           type="text"
           placeholder="Título"
@@ -144,57 +145,56 @@ export default function Publicacoes() {
       </form>
 
       {/* Lista de publicações */}
-<div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-  {publicacoesFiltradas.length === 0 ? (
-    <p style={{ textAlign: "center", color: "#aaaaaa", fontStyle: "italic" }}>
-      Nenhuma publicação encontrada.
-    </p>
-  ) : (
-    publicacoesFiltradas.map((p) => (
-      <div
-        key={p.id}
-        style={{
-          padding: "20px",
-          borderRadius: "12px",
-          backgroundColor: "#2a2a2a",
-          boxShadow: "0 8px 20px rgba(0,0,0,0.5)",
-          transition: "all 0.3s ease",
-          display: "flex",
-          flexDirection: "column",
-          gap: "10px",
-        }}
-      >
-        <h2 style={{ fontSize: "1.5rem", fontWeight: "700", color: "#ffffff" }}>
-          {p.titulo}
-        </h2>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px" }}>
+        {publicacoesFiltradas.length === 0 ? (
+          <p style={{ textAlign: "center", color: "#aaaaaa", fontStyle: "italic" }}>
+            Nenhuma publicação encontrada.
+          </p>
+        ) : (
+          publicacoesFiltradas.map((p) => (
+            <div
+              key={p.id}
+              style={{
+                padding: "20px",
+                borderRadius: "12px",
+                backgroundColor: "#2a2a2a",
+                boxShadow: "0 8px 20px rgba(0,0,0,0.5)",
+                transition: "all 0.3s ease",
+                display: "flex",
+                flexDirection: "column",
+                gap: "10px",
+              }}
+            >
+              <h2 style={{ fontSize: "1.5rem", fontWeight: "700", color: "#ffffff" }}>
+                {p.titulo}
+              </h2>
 
-        <a
-          href={p.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            padding: "10px 20px",
-            borderRadius: "8px",
-            backgroundImage: "linear-gradient(90deg, #0077ff, #00c6ff)",
-            color: "#fff",
-            fontWeight: "bold",
-            textDecoration: "none",
-            textAlign: "center",
-            cursor: "pointer",
-            transition: "all 0.3s ease",
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.opacity = 0.85)}
-          onMouseLeave={(e) => (e.currentTarget.style.opacity = 1)}
-          onMouseDown={(e) => (e.currentTarget.style.transform = "scale(0.97)")}
-          onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
-        >
-          Abrir Link
-        </a>
+              <a
+                href={p.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  padding: "10px 20px",
+                  borderRadius: "8px",
+                  backgroundImage: "linear-gradient(90deg, #0077ff, #00c6ff)",
+                  color: "#fff",
+                  fontWeight: "bold",
+                  textDecoration: "none",
+                  textAlign: "center",
+                  cursor: "pointer",
+                  transition: "all 0.3s ease",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.opacity = 0.85)}
+                onMouseLeave={(e) => (e.currentTarget.style.opacity = 1)}
+                onMouseDown={(e) => (e.currentTarget.style.transform = "scale(0.97)")}
+                onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
+              >
+                Abrir Link
+              </a>
+            </div>
+          ))
+        )}
       </div>
-    ))
-  )}
-</div>
-
 
       {/* Modal */}
       {showModal && (
