@@ -23,35 +23,34 @@ export default function Login() {
     }
   }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleNumberClick = (num) => {
+    if (pin.length < 6) {
+      const newPin = pin + num;
+      setPin(newPin);
 
-    if (!pin) {
-      setError('Digite o PIN.');
-      setSuccess('');
-      return;
+      if (newPin.length === 6) {
+        validarPin(newPin);
+      }
     }
+  };
 
-    if (pin !== '638700') {
-      setError('PIN incorreto. Tente novamente.');
+  const validarPin = (valor) => {
+    if (valor !== '638700') {
+      setError('PIN incorreto.');
       setSuccess('');
+      setTimeout(() => setError(''), 1500);
+      setPin('');
       return;
     }
 
     setLoading(true);
+    setSuccess('Acesso liberado!');
 
     setTimeout(() => {
       localStorage.setItem('token', 'teste-token');
       localStorage.setItem('usuario', JSON.stringify({ nome: 'Acesso PIN' }));
-      setError('');
-      setSuccess('Login bem-sucedido!');
-      setLoading(false);
       router.push('/Home');
-    }, 1000);
-  };
-
-  const handleNumberClick = (num) => {
-    if (pin.length < 6) setPin(pin + num);
+    }, 800);
   };
 
   const handleDelete = () => {
@@ -68,59 +67,64 @@ export default function Login() {
         <link rel="icon" href="icon-192x192.png" />
       </Head>
 
-      <div className="min-h-screen flex items-center justify-center bg-[#1D1D1D] text-white p-4">
-        <div className="w-full max-w-sm sm:max-w-md bg-[#2a2a2a] rounded-2xl shadow-lg p-6 sm:p-8 flex flex-col gap-6 z-10 border border-[#444]">
-          <h2 className="text-3xl font-bold text-center text-white">Digite seu PIN</h2>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#1D1D1D] text-white px-4 relative overflow-hidden">
+        {/* Fundo com leve brilho */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1d1d1d] to-[#2a2a2a] opacity-90" />
 
-          {error && <p className="text-red-500 text-center">{error}</p>}
-          {success && <p className="text-green-400 text-center">{success}</p>}
+        <div className="relative w-full max-w-[340px] bg-[#2a2a2a]/90 backdrop-blur-md rounded-2xl shadow-xl p-6 flex flex-col gap-5 border border-[#3a3a3a] z-10">
+          <h2 className="text-2xl font-bold text-center text-white mb-2 tracking-wide">
+            Digite seu PIN
+          </h2>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4 items-center">
+          {error && <p className="text-red-500 text-center text-sm">{error}</p>}
+          {success && <p className="text-green-400 text-center text-sm">{success}</p>}
+
+          <div className="flex justify-center">
             <input
               type="password"
               value={pin}
               readOnly
               placeholder="••••••"
-              className="w-40 sm:w-52 text-center text-2xl sm:text-3xl tracking-[10px] px-4 py-3 rounded-xl bg-[#333] border border-[#555] text-white focus:outline-none"
+              className="w-40 text-center text-3xl tracking-[10px] px-3 py-2 rounded-xl bg-[#333] border border-[#555] text-white focus:outline-none shadow-inner"
             />
+          </div>
 
-            <div className="grid grid-cols-3 gap-4 mt-4">
-              {[1,2,3,4,5,6,7,8,9].map((num) => (
-                <button
-                  key={num}
-                  type="button"
-                  onClick={() => handleNumberClick(num.toString())}
-                  className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center rounded-full bg-[#444] hover:bg-[#555] text-xl sm:text-2xl font-bold transition"
-                >
-                  {num}
-                </button>
-              ))}
-              <div></div>
+          <div className="grid grid-cols-3 gap-3 justify-center mt-4">
+            {[1,2,3,4,5,6,7,8,9].map((num) => (
               <button
+                key={num}
                 type="button"
-                onClick={() => handleNumberClick('0')}
-                className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center rounded-full bg-[#444] hover:bg-[#555] text-xl sm:text-2xl font-bold transition"
+                onClick={() => handleNumberClick(num.toString())}
+                className="w-16 h-16 flex items-center justify-center rounded-full bg-[#3b3b3b] hover:bg-[#555] text-xl font-semibold transition-all duration-150 active:scale-95 shadow-md"
               >
-                0
+                {num}
               </button>
-              <button
-                type="button"
-                onClick={handleDelete}
-                className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center rounded-full bg-red-600 hover:bg-red-700 text-xl sm:text-2xl font-bold transition"
-              >
-                ⌫
-              </button>
-            </div>
-
+            ))}
+            <div></div>
             <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 mt-6 rounded-xl font-semibold bg-[#444] hover:bg-[#555] transition text-lg sm:text-xl"
+              type="button"
+              onClick={() => handleNumberClick('0')}
+              className="w-16 h-16 flex items-center justify-center rounded-full bg-[#3b3b3b] hover:bg-[#555] text-xl font-semibold transition-all duration-150 active:scale-95 shadow-md"
             >
-              {loading ? 'Carregando...' : 'Entrar'}
+              0
             </button>
-          </form>
+            <button
+              type="button"
+              onClick={handleDelete}
+              className="w-16 h-16 flex items-center justify-center rounded-full bg-red-600 hover:bg-red-700 text-xl font-semibold transition-all duration-150 active:scale-95 shadow-md"
+            >
+              ⌫
+            </button>
+          </div>
+
+          {loading && (
+            <p className="text-center text-gray-400 text-sm mt-2 animate-pulse">
+              Carregando...
+            </p>
+          )}
         </div>
+
+        <p className="text-sm text-gray-500 mt-6">© 2025 MDS</p>
       </div>
     </>
   );
